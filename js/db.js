@@ -391,7 +391,7 @@ const db = {
       user.id = 'u-' + Date.now();
       user.createdDate = new Date().toISOString();
       user.status = user.status || 'active';
-      user.avatar = user.avatar || 'assets/avatar.png';
+      user.avatar = user.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150';
       users.push(user);
       this.addActivityLog(user.id, `New user ${user.name} created inside database.`, 'User Management');
       this.addNotification('Security', 'New Workspace Member Added', `${user.name} has been enrolled in the workspace directory.`, 'Medium');

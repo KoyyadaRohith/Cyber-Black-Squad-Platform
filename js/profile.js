@@ -209,7 +209,7 @@ const profileModule = {
   handleRemoveAvatar() {
     if (confirm('Reset display profile picture?')) {
       const user = window.cbsAuth.getCurrentUser();
-      user.avatar = 'assets/avatar.png';
+      user.avatar = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150';
       window.cbsDB.saveUser(user);
       
       document.getElementById('sidebarUserAvatar').src = user.avatar;

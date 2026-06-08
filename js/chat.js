@@ -77,7 +77,7 @@ const chatModule = {
     const isAdmin = window.cbsAuth.isAdmin();
 
     filtered.forEach(m => {
-      const sender = team.find(u => u.id === m.senderId) || { name: 'Former Worker', avatar: 'assets/avatar.png', role: 'Collaborator' };
+      const sender = team.find(u => u.id === m.senderId) || { name: 'Former Worker', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150', role: 'Collaborator' };
       const isSelf = m.senderId === user.id;
 
       // Reactions formatting

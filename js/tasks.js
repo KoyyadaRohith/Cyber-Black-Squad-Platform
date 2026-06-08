@@ -130,7 +130,7 @@ const tasksModule = {
           <span class="task-deadline" style="${deadlineStyle}">${deadlineIcon} ${this.formatDate(t.dueDate)}</span>
           <div style="display:flex; align-items:center; gap:6px;">
             ${t.comments?.length > 0 ? `<span style="font-size:11px; color:var(--text-light);"><i class="fa-regular fa-comment"></i> ${t.comments.length}</span>` : ''}
-            <img src="${assignee ? assignee.avatar : 'assets/avatar.png'}" 
+            <img src="${assignee ? assignee.avatar : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150'}" 
                  class="avatar" style="width:24px; height:24px; border:none;" 
                  title="Assigned to: ${assignee ? assignee.name : 'Unassigned'}">
           </div>
@@ -329,12 +329,12 @@ const tasksModule = {
 
     const project = window.cbsDB.getProjectById(t.projectId) || { name: 'Internal Workspace' };
     const team = window.cbsDB.getUsers();
-    const assignee = team.find(u => u.id === t.assigneeId) || { name: 'Unassigned', avatar: 'assets/avatar.png' };
+    const assignee = team.find(u => u.id === t.assigneeId) || { name: 'Unassigned', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150' };
 
     // Format comments logs
     let commentsHtml = '';
     (t.comments || []).forEach(c => {
-      const sender = team.find(u => u.id === c.senderId) || { name: 'Member', avatar: 'assets/avatar.png' };
+      const sender = team.find(u => u.id === c.senderId) || { name: 'Member', avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150' };
       commentsHtml += `
         <div style="display:flex; gap:10px; padding:10px; background:var(--bg-main); border:1px solid var(--border-color); border-radius:var(--radius-md); font-size:12px;">
           <img src="${sender.avatar}" class="avatar" style="width:28px; height:28px; border:none;">
