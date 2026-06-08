@@ -124,14 +124,14 @@ Cyber Black Squad/
         └── avatar.png
 ```
 
-## 🛠️ Technology Stack
-
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript (ES6+)
-- **Libraries (if used)**:
-  - FontAwesome (icons)
-  - Chart.js (analytics charts)
-  - Google Fonts
-- **Storage**: Browser LocalStorage API
+## 🛠️ Technology Stack 
+The platform is developed using modern web technologies: 
+* 🌐 HTML5 for structure and content
+* 🎨 CSS3 for responsive design and user interface styling
+* ⚡ JavaScript (ES6) for application logic and interactivity
+* 📈 Chart.js for analytics and data visualization
+* 🎯 Font Awesome for icons and UI enhancements
+* 💾 Local Storage API for client-side data management
 
 ## 🚀 Getting Started
 
