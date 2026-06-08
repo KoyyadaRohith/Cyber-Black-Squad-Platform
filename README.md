@@ -1,4 +1,4 @@
-## 🛡️ Cyber Black Squad — Startup Workspace Platform
+# 🛡️ Cyber Black Squad — Startup Workspace Platform
 
 A modern, vanilla JavaScript workspace platform for startups and teams to collaborate on projects, manage tasks, and communicate in one place.
 
