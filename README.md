@@ -143,24 +143,7 @@ The platform is developed using modern web technologies:
 
 Open the project with one of the following options:
 
-**Option A (quick start)**
 - Double-click `index.html` (works for many features, but some browser setups restrict storage/cross-file access).
-
-**Option B (recommended)**
-Start a local server from the project root:
-
-#### Python 3
-```bash
-python -m http.server 8000
-```
-
-#### Node.js (http-server)
-```bash
-npx http-server
-```
-
-Then open:
-- `http://localhost:8000`
 
 ## 🧭 Usage
 
