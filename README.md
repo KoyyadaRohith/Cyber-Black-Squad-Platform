@@ -246,10 +246,9 @@ Controls:
 
 > Permissions are enforced through `auth.js` / permission checks in modules.
 
-- **Founder**: full system access
 - **Admin**: user/project management + analytics; restricted system settings
-- **Manager**: manages assigned projects/tasks; limited admin access
-- **Team Member**: works on assigned projects/tasks; limited capabilities
+- **Founder**: full system access
+- **Users**: works on assigned projects/tasks; limited capabilities
 
 ## 🔐 Security Notes
 
@@ -310,20 +309,30 @@ A typical layout in LocalStorage is shaped like this:
 - Confirm `chat.js` loads
 - Check console
 
-## 🚧 Future Enhancements
+## 🚀 Future Enhancements
+The current version focuses on providing a complete frontend workspace experience. Future versions are planned to include advanced enterprise features such as:
+* 🐍 Python Backend Integration
+* 📄 CSV Import and Export Support
+* 🗄️ Database Integration (MySQL/PostgreSQL)
+* ☁️ Cloud-Based Data Storage
+* 🛡️ Advanced Security Monitoring
+* 🤖 AI-Powered Analytics and Insights
+* ⚙️ Automated Workflow Management
+* 🔄 Real-Time Team Collaboration
+* 🔗 API Integration Services
+* 📱 Mobile Application Support
+* 📈 Enhanced Reporting and Business Intelligence Features
 
-- Backend server integration (Node.js/Express)
-- Real database (MongoDB/PostgreSQL)
-- WebSocket for true real-time updates
-- File sharing and persistent storage
-- Advanced analytics/report export (CSV/PDF)
-- PWA/offline improvements
-- Internationalization (i18n)
-- Security hardening for production deployment
+## 🎯 Conclusion
+Cyber Black Squad Platform demonstrates the implementation of a modern startup workspace environment that combines project management, task tracking, collaboration, analytics, and user management into a single platform. The project showcases practical web development skills while providing a scalable foundation for future enterprise-level enhancements and integrations.
 
-## 📄 License
+## 👨‍💻 Developed By
 
-This project is proprietary software. All rights reserved.
+**Koyyada Rohith**
 
-**Happy coding! 🚀**
+🔐 Cybersecurity Enthusiast | 🎓 B.Tech CSE | 🚀 Building Projects in Cybersecurity, Collaboration & Technology
+
+## 📌 Version
+
+**Version 1.0**
 
