@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workspace | Cyber Black Squad Enterprise</title>
+  <!-- Third Party Libraries: FontAwesome Icons & Chart.js -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Cyber Black Squad custom styling sheets -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- EARLY AUTHENTICATION GUARD - prevents unauthenticated access -->
+  <script>
+    // Check localStorage immediately (synchronously) before page renders
+    const sessionKey = 'cbs_session';
+    const session = sessionStorage.getItem(sessionKey);
+
+    
+    if (!session) {
+      // Not authenticated - redirect to home page
+      window.location.href = 'home.html';
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Core Page layout framework -->
+  <div class="app-container">
+    
+    <!-- ========================================== -->
+    <!-- SIDEBAR NAVIGATION PANEL                   -->
+    <!-- ========================================== -->
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="metric-icon-box" style="width: 32px; height: 32px; font-size: 14px; border-radius: var(--radius-sm);">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <span>Cyber Black Squad</span>
+        </div>
+        <button id="sidebarToggle" class="sidebar-toggle-btn" title="Collapse Menu">
+          <i id="toggleIcon" class="fa-solid fa-angle-left"></i>
+        </button>
+      </div>
+
+      <!-- Navigation links menu with explicit IDs for strict Role-Access toggles -->
+      <ul class="sidebar-menu">
+        <li class="sidebar-menu-item active" data-view="dashboard" id="sidebarDashboardItem">
+          <a href="#"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a>
+        </li>
+        <li class="sidebar-menu-item" data-view="projects" id="sidebarProjectsItem">
+          <a href="#"><i class="fa-solid fa-briefcase"></i><span>Projects</span></a>
+        </li>
+        <li class="sidebar-menu-item" data-view="tasks" id="sidebarTasksItem">
+          <a href="#"><i class="fa-solid fa-list-check"></i><span>Tasks</span></a>
+        </li>
+        <li class="sidebar-menu-item" data-view="team" id="sidebarTeamItem">
+          <a href="#"><i class="fa-solid fa-comments"></i><span>Team Collaboration</span></a>
+        </li>
+        
+        <!-- Upgraded Team Directory sidebar navigation entry -->
+        <li class="sidebar-menu-item" data-view="directory" id="sidebarDirectoryItem">
+          <a href="#"><i class="fa-solid fa-address-book"></i><span>Team Directory</span></a>
+        </li>
+
+        <li class="sidebar-menu-item" data-view="notifications" id="sidebarNotificationsItem">
+          <a href="#"><i class="fa-solid fa-bell"></i><span>Notifications</span></a>
+        </li>
+        <li class="sidebar-menu-item" data-view="analytics" id="sidebarAnalyticsItem">
+          <a href="#"><i class="fa-solid fa-chart-pie"></i><span>Analytics</span></a>
+        </li>
+        <li class="sidebar-menu-item" data-view="profile" id="sidebarProfileItem">
+          <a href="#"><i class="fa-solid fa-user-gear"></i><span>Profile</span></a>
+        </li>
+        <li class="sidebar-menu-item" data-view="settings" id="sidebarSettingsItem">
+          <a href="#"><i class="fa-solid fa-sliders"></i><span>Settings</span></a>
+        </li>
+        
+        <!-- Upgraded Phase 3.5 Administrative Oversight menu -->
+        <li class="sidebar-menu-item" data-view="admin" id="sidebarAdminItem" style="display:none; border-top:1px dashed var(--border-color); padding-top:12px;">
+          <a href="#"><i class="fa-solid fa-user-shield"></i><span>Admin Panel</span></a>
+        </li>
+
+        <li class="sidebar-menu-item logout-item" id="logoutBtn" style="margin-top: 12px; border-top: 1px dashed var(--border-color);">
+          <a href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span></a>
+        </li>
+      </ul>
+
+      <!-- Active Connection Status Profile footer -->
+      <div class="sidebar-footer">
+        <img id="sidebarUserAvatar" src="" alt="Avatar" class="avatar" style="width: 38px; height: 38px;">
+        <div class="sidebar-footer-info">
+          <span id="sidebarUserName" class="sidebar-footer-name">Koyyada Rohith</span>
+          <span id="sidebarUserRole" class="sidebar-footer-role">Founder</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ========================================== -->
+    <!-- MAIN APPLICATION WORKSPACE                 -->
+    <!-- ========================================== -->
+    <main class="main-wrapper">
+      
+      <!-- TOP NAVIGATION BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h2 id="pageTitle" class="topbar-title">Dashboard Overview</h2>
+        </div>
+
+        <div class="topbar-right">
+          <!-- Quick Search -->
+          <div class="topbar-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="globalSearchInput" placeholder="Press Enter to search users, tasks...">
+          </div>
+
+          <div class="topbar-actions">
+            <!-- Theme quick switcher shortcut button -->
+            <button onclick="cbsAppThemeQuickToggle()" class="topbar-btn" title="Toggle Darkness Theme" style="font-size:16px;">
+              <i class="fa-solid fa-circle-half-stroke"></i>
+            </button>
+
+            <!-- Notifications Toggle Bell -->
+            <button id="notificationToggleBtn" class="topbar-btn" title="View Notifications">
+              <i class="fa-regular fa-bell"></i>
+              <span id="unreadIndicator" class="notification-badge" style="display: none;"></span>
+            </button>
+            
+            <!-- Quick Notification Dropdown Center -->
+            <div id="notificationDropdown" class="notification-dropdown">
+              <div class="notification-dropdown-header">
+                <h4>Recent Notifications</h4>
+                <button onclick="notificationsModule.handleMarkAllRead()">Mark Read</button>
+              </div>
+              <ul id="notificationDropdownList" class="notification-dropdown-list">
+                <!-- Dynamically Populated -->
+              </ul>
+              <div class="notification-dropdown-footer">
+                <a href="#" onclick="switchActiveView('notifications')">View Notifications Center</a>
+              </div>
+            </div>
+
+            <!-- Profile switcher shortcut -->
+            <div class="topbar-user-profile" onclick="switchActiveView('profile')">
+              <img id="topbarUserAvatar" src="" alt="Avatar" class="avatar">
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- VIEWPORTS VIEWS CONTAINER -->
+      <div class="content-area">
+
+        <!-- ========================================== -->
+        <!-- 1. DASHBOARD VIEWPORT                      -->
+        <!-- ========================================== -->
+        <section id="view-dashboard" class="content-view active">
+          
+          <!-- Note: Founder Dashboard Header pre-pends dynamically here if Founder / Admin -->
+
+          <!-- 4-Column Stats overview row -->
+          <div class="dashboard-grid">
+            <div class="metric-card">
+              <div class="metric-info">
+                <span class="metric-title">Active Projects Backlog</span>
+                <span id="dash-total-projects" class="metric-value">0</span>
+                <span class="metric-indicator positive"><i class="fa-solid fa-arrow-trend-up"></i> operational velocity</span>
+              </div>
+              <div class="metric-icon-box"><i class="fa-solid fa-briefcase"></i></div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <span class="metric-title">Total Tasks scheduled</span>
+                <span id="dash-total-tasks" class="metric-value">0</span>
+                <span class="metric-indicator positive"><i class="fa-solid fa-square-check"></i> <span id="dash-pending-tasks">0</span> pending</span>
+              </div>
+              <div class="metric-icon-box"><i class="fa-solid fa-list-check"></i></div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <span class="metric-title">Workspace Members</span>
+                <span id="dash-team-online" class="metric-value">0</span>
+                <span class="metric-indicator positive"><i class="fa-solid fa-users"></i> <span id="dash-total-team">0</span> active accounts</span>
+              </div>
+              <div class="metric-icon-box"><i class="fa-solid fa-user-group"></i></div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <span class="metric-title">Workspace Deliveries Rate</span>
+                <span class="metric-value" id="dash-productivity-score">0%</span>
+                <span class="metric-indicator positive"><i class="fa-solid fa-bolt"></i> sprint velocity score</span>
+              </div>
+              <div class="metric-icon-box"><i class="fa-solid fa-bolt"></i></div>
+            </div>
+          </div>
+
+          <!-- Mid Dashboard charts & logs -->
+          <div class="dashboard-panels">
+            <!-- Line Graph -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3 class="panel-title"><i class="fa-solid fa-chart-line" style="color: var(--primary-color); margin-right: 8px;"></i>Weekly Workspace Activities Velocity</h3>
+                <span class="badge badge-purple" style="font-size:11px;">Active Log lines</span>
+              </div>
+              <div class="chart-container" style="height: 300px;">
+                <canvas id="dashboardPerformanceChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Activity Logs feed -->
+            <div class="panel-card">
+              <div class="panel-header">
+                <h3 class="panel-title"><i class="fa-solid fa-clock-rotate-left" style="color: var(--secondary-color); margin-right: 8px;"></i>System Audit Timeline</h3>
+                <span class="badge badge-blue" style="font-size:11px;">Real-Time Logs</span>
+              </div>
+              <div id="dashboardActivityTimeline" class="timeline">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 2. PROJECTS MANAGEMENT VIEWPORT            -->
+        <!-- ========================================== -->
+        <section id="view-projects" class="content-view">
+          <div class="module-toolbar">
+            <div class="search-filter-row">
+              <div class="topbar-search" style="display: block; width: 220px;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="projectSearch" placeholder="Search projects..." oninput="projectsModule.render()">
+              </div>
+              <select id="projectStatusFilter" class="filter-select" onchange="projectsModule.render()">
+                <option value="All">All Projects</option>
+                <option value="Planning">Planning</option>
+                <option value="In Progress">In Progress</option>
+                <option value="In Review">In Review</option>
+                <option value="Completed">Completed</option>
+                <option value="Archived">Archived Records</option>
+              </select>
+            </div>
+            
+            <button id="addNewProjectBtn" class="btn-primary" onclick="projectsModule.openCreateModal()">
+              <i class="fa-solid fa-folder-plus"></i> Create Project
+            </button>
+          </div>
+
+          <!-- Project Cards grid -->
+          <div id="projectsCardsGrid" class="projects-grid">
+            <!-- Dynamically Populated -->
+          </div>
+
+          <!-- spreadsheet table details -->
+          <div class="panel-card" style="margin-top: 32px;">
+            <div class="panel-header" style="margin-bottom: 16px;">
+              <h3 class="panel-title"><i class="fa-solid fa-table-list" style="color: var(--primary-color); margin-right: 8px;"></i>Project Roster Matrix</h3>
+              <span class="badge badge-blue" id="inventory-count-badge">0 Total</span>
+            </div>
+            <div class="data-table-container">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Project Name</th>
+                    <th>Status</th>
+                    <th>Progress</th>
+                    <th>Due Date</th>
+                    <th>Active Team</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="projectsTableBody">
+                  <!-- Dynamically Populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 3. TASK BACKLOG VIEWPORT (5 COL KANBAN)     -->
+        <!-- ========================================== -->
+        <section id="view-tasks" class="content-view">
+          <div class="module-toolbar">
+            <div class="search-filter-row">
+              <div class="topbar-search" style="display: block; width: 220px;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="taskSearch" placeholder="Search task titles..." oninput="tasksModule.render()">
+              </div>
+              <select id="taskProjectFilter" class="filter-select" onchange="tasksModule.render()">
+                <option value="All">All Projects</option>
+                <!-- Dynamically Populated -->
+              </select>
+              <select id="taskPriorityFilter" class="filter-select" onchange="tasksModule.render()">
+                <option value="All">All Priorities</option>
+                <option value="High">High</option>
+                <option value="Medium">Medium</option>
+                <option value="Low">Low</option>
+              </select>
+            </div>
+            
+            <button id="addNewTaskBtn" class="btn-primary" onclick="tasksModule.openCreateModal()">
+              <i class="fa-solid fa-plus"></i> Create Task
+            </button>
+          </div>
+
+          <!-- Upgraded Phase 3.5: Five Backlog Columns Board layout -->
+          <div class="kanban-board" style="grid-template-columns: repeat(5, 1fr);">
+            <!-- Column 1: Backlog -->
+            <div class="kanban-col">
+              <div class="kanban-col-header">
+                <span class="kanban-col-title"><i class="fa-regular fa-folder-open" style="color: var(--text-light);"></i> Backlog</span>
+                <span id="count-backlog" class="kanban-card-count">0</span>
+              </div>
+              <div id="col-backlog-list" class="kanban-cards-list" data-status="Backlog">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+
+            <!-- Column 2: To Do -->
+            <div class="kanban-col">
+              <div class="kanban-col-header">
+                <span class="kanban-col-title"><i class="fa-regular fa-circle" style="color: var(--text-light);"></i> To Do</span>
+                <span id="count-todo" class="kanban-card-count">0</span>
+              </div>
+              <div id="col-todo-list" class="kanban-cards-list" data-status="To Do">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+
+            <!-- Column 3: In Progress -->
+            <div class="kanban-col">
+              <div class="kanban-col-header">
+                <span class="kanban-col-title"><i class="fa-solid fa-circle-notch fa-spin" style="color: var(--primary-color);"></i> In Progress</span>
+                <span id="count-inprogress" class="kanban-card-count">0</span>
+              </div>
+              <div id="col-inprogress-list" class="kanban-cards-list" data-status="In Progress">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+
+            <!-- Column 4: Review -->
+            <div class="kanban-col">
+              <div class="kanban-col-header">
+                <span class="kanban-col-title"><i class="fa-regular fa-eye" style="color: var(--color-warning);"></i> In Review</span>
+                <span id="count-inreview" class="kanban-card-count">0</span>
+              </div>
+              <div id="col-inreview-list" class="kanban-cards-list" data-status="In Review">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+
+            <!-- Column 5: Completed -->
+            <div class="kanban-col">
+              <div class="kanban-col-header">
+                <span class="kanban-col-title"><i class="fa-solid fa-circle-check" style="color: var(--color-success);"></i> Completed</span>
+                <span id="count-completed" class="kanban-card-count">0</span>
+              </div>
+              <div id="col-completed-list" class="kanban-cards-list" data-status="Completed">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 4. TEAM COLLABORATION                      -->
+        <!-- ========================================== -->
+        <section id="view-team" class="content-view">
+          <div class="collaboration-layout" style="grid-template-columns: 240px 1fr;">
+            
+            <!-- Left Side stacked panels: Chat Channels List & Team Directory Summary -->
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <!-- Channels panel card -->
+              <div class="team-list-panel" style="flex: 1; min-height: 200px;">
+                <div class="panel-header" style="padding: 12px 16px; border-bottom: 1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+                  <h3 class="panel-title" style="font-size:12.5px;"><i class="fa-regular fa-comments" style="color:var(--primary-color); margin-right:6px;"></i>Discussion Channels</h3>
+                  <button onclick="chatModule.openCreateChannelModal()" class="badge badge-purple" style="font-size:10px; cursor:pointer;" title="Add Channel"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <div class="panel-scroll-area" style="padding: 8px;">
+                  <ul id="chatChannelsList" style="display:flex; flex-direction:column; gap:2px; padding:0;">
+                    <!-- Dynamically Populated -->
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Quick summary directory list panel card -->
+              <div class="team-list-panel" style="flex: 1.2; min-height: 240px;">
+                <div class="panel-header" style="padding: 12px 16px; border-bottom: 1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
+                  <h3 class="panel-title" style="font-size:12.5px;"><i class="fa-solid fa-address-book" style="color:var(--secondary-color); margin-right:6px;"></i>Active Members</h3>
+                  <button onclick="switchActiveView('directory')" class="badge badge-blue" style="font-size:10px; cursor:pointer;" title="Go to Team Directory">Full List</button>
+                </div>
+                <div class="panel-scroll-area" style="padding: 8px;">
+                  <div id="teamDirectoryList">
+                    <!-- Dynamically Populated -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Side: Discussions Channels Message history -->
+            <div class="chat-workspace">
+              <div class="chat-header" style="padding: 12px 20px;">
+                <div class="chat-title-group">
+                  <h4 id="activeChannelHeaderTitle">#general</h4>
+                  <p id="activeChannelHeaderDesc">General Workspace dialogue.</p>
+                </div>
+                
+                <!-- Quick message filter search -->
+                <div style="display:flex; gap:10px; align-items:center;">
+                  <div class="topbar-search" style="display:block; width:180px;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="chatMsgSearchInput" placeholder="Filter message..." oninput="chatModule.renderMessagesFeed()" style="padding: 6px 12px 6px 30px; font-size:11.5px;">
+                  </div>
+                  <div class="avatar-group" id="chatParticipantsAvatars">
+                    <!-- Filled Dynamically -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Messages List feed -->
+              <div id="chatMessagesArea" class="chat-messages-area">
+                <!-- Dynamically Populated -->
+              </div>
+
+              <!-- Inputs submit bar -->
+              <form id="chatSubmitForm" class="chat-input-bar" onsubmit="chatModule.handleSendChatMessage(event)" style="padding: 12px 20px;">
+                <input type="text" id="chatMessageInput" placeholder="Message active channel conversation thread..." required autocomplete="off" style="padding:10px 16px;">
+                <button type="submit" class="chat-send-btn" style="width:38px; height:38px;" title="Send Message">
+                  <i class="fa-regular fa-paper-plane"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 5. NOTIFICATIONS CENTER VIEWPORT           -->
+        <!-- ========================================== -->
+        <section id="view-notifications" class="content-view">
+          <div class="settings-container">
+            <div class="settings-section-card">
+              
+              <!-- Notifications Toolbar -->
+              <div class="panel-header" style="border-bottom:1px solid var(--border-color); padding-bottom:12px; margin-bottom:16px; flex-wrap:wrap; gap:16px;">
+                <h3 class="panel-title" style="font-size:15px;"><i class="fa-solid fa-bell" style="color:var(--primary-color); margin-right:8px;"></i>Live Notifications</h3>
+                
+                <!-- Search query filter -->
+                <div class="topbar-search" style="display:block; width:200px;">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input type="text" id="notificationSearchInput" placeholder="Filter alerts text..." oninput="notificationsModule.render()" style="padding:6px 12px 6px 30px; font-size:11.5px;">
+                </div>
+
+                <div class="card-actions">
+                  <button onclick="notificationsModule.handleMarkAllRead()" class="btn-secondary" style="padding:6px 12px; font-size:11.5px;"><i class="fa-solid fa-envelope-open" style="margin-right:6px;"></i>Mark All Read</button>
+                  <button onclick="notificationsModule.handleClearAll()" class="btn-secondary" style="padding:6px 12px; font-size:11.5px; color:var(--color-danger); border-color:rgba(239,68,68,0.2);"><i class="fa-solid fa-trash-can" style="margin-right:6px;"></i>Wipe Logs</button>
+                </div>
+              </div>
+
+              <!-- Notifications category tag switches -->
+              <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+                <button onclick="notificationsModule.switchCategoryFilter('All')" id="notif-tab-all" class="badge badge-purple" style="cursor:pointer; border:none;">All Categories</button>
+                <button onclick="notificationsModule.switchCategoryFilter('Tasks')" id="notif-tab-tasks" class="badge badge-blue" style="cursor:pointer; border:none;">Tasks Backlogs</button>
+                <button onclick="notificationsModule.switchCategoryFilter('Projects')" id="notif-tab-projects" class="badge badge-blue" style="cursor:pointer; border:none;">Projects Scope</button>
+                <button onclick="notificationsModule.switchCategoryFilter('Messages')" id="notif-tab-messages" class="badge badge-blue" style="cursor:pointer; border:none;">Chats Channels</button>
+                <button onclick="notificationsModule.switchCategoryFilter('Security')" id="notif-tab-security" class="badge badge-blue" style="cursor:pointer; border:none;">Security Warnings</button>
+              </div>
+
+              <!-- Dynamic list cards container -->
+              <div id="fullNotificationsList" style="display:flex; flex-direction:column; gap:10px;">
+                <!-- Dynamically Populated -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 6. ANALYTICS & STATS VIEWPORT              -->
+        <!-- ========================================== -->
+        <section id="view-analytics" class="content-view">
+          <div style="display:flex; flex-direction:column; gap:24px;">
+            <!-- Row 1: Line chart Weekly growth -->
+            <div class="panel-card" style="min-height: 280px;">
+              <div class="panel-header">
+                <h3 class="panel-title"><i class="fa-solid fa-chart-line" style="color:var(--secondary-color); margin-right:8px;"></i>Weekly Workspace Activity logs frequency</h3>
+                <span class="badge badge-purple">Line Graph</span>
+              </div>
+              <div class="chart-container" style="height:220px;">
+                <canvas id="analyticsWeeklyGrowthChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Row 2: 2 Column stats Doughnut & horizontal bar -->
+            <div class="analytics-grid-top" style="margin-bottom:0;">
+              <!-- Doughnut: tasks completed -->
+              <div class="analytics-card-half" style="min-height: 280px;">
+                <div class="panel-header">
+                  <h3 class="panel-title"><i class="fa-solid fa-chart-pie" style="color:var(--primary-color); margin-right:8px;"></i>Task backlogs completion distribution</h3>
+                  <span class="badge badge-blue">Doughnut</span>
+                </div>
+                <div class="chart-container" style="height:200px;">
+                  <canvas id="analyticsTasksChart"></canvas>
+                </div>
+              </div>
+
+              <!-- Bar: project deliveries progress -->
+              <div class="analytics-card-half" style="min-height: 280px;">
+                <div class="panel-header">
+                  <h3 class="panel-title"><i class="fa-solid fa-chart-simple" style="color:var(--color-success); margin-right:8px;"></i>Projects Delivery velocity progress</h3>
+                  <span class="badge badge-green">Horizontal Bar</span>
+                </div>
+                <div class="chart-container" style="height:200px;">
+                  <canvas id="analyticsProjectsVelocityChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 3: 2 Column team metrics & user audit counts -->
+            <div class="analytics-grid-top" style="margin-bottom:0;">
+              <!-- Pie: team members contribution resolved tasks -->
+              <div class="analytics-card-half" style="min-height: 280px;">
+                <div class="panel-header">
+                  <h3 class="panel-title"><i class="fa-solid fa-award" style="color:var(--secondary-color); margin-right:8px;"></i>Team members Task Contributions</h3>
+                  <span class="badge badge-purple">Pie</span>
+                </div>
+                <div class="chart-container" style="height:200px;">
+                  <canvas id="analyticsTeamContributionChart"></canvas>
+                </div>
+              </div>
+
+              <!-- Vertical Bar: logs audits frequency counts -->
+              <div class="analytics-card-half" style="min-height: 280px;">
+                <div class="panel-header">
+                  <h3 class="panel-title"><i class="fa-solid fa-shield-halved" style="color:var(--primary-color); margin-right:8px;"></i>User System security activity counts</h3>
+                  <span class="badge badge-blue">Vertical Bar</span>
+                </div>
+                <div class="chart-container" style="height:200px;">
+                  <canvas id="analyticsUserActivityChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Insight metrics box -->
+          <h3 style="font-size:15px; font-weight:700; margin: 32px 0 16px 0;"><i class="fa-solid fa-brain" style="color:var(--secondary-color); margin-right:8px;"></i>Startup Growth Analytics Insights</h3>
+          <div class="analytics-insights">
+            <div class="insight-box">
+              <span class="insight-title" style="color:var(--primary-color);">Operational Velocity</span>
+              <p class="insight-desc">Task delivery speeds have accelerated by <strong>24%</strong> since integrating discussions channels chat pipelines.</p>
+            </div>
+            <div class="insight-box">
+              <span class="insight-title" style="color:var(--secondary-color);">Security telemetry</span>
+              <p class="insight-desc">Security checks report <strong>100% active compliance</strong> across Linux kernel filters probes engines.</p>
+            </div>
+            <div class="insight-box">
+              <span class="insight-title" style="color:var(--color-success);">Resource allocation</span>
+              <p class="insight-desc">Project delivery milestone ratios average <strong>74% completion</strong> in the current sprint logs.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 7. PROFILE VIEWPORT                        -->
+        <!-- ========================================== -->
+        <section id="view-profile" class="content-view">
+          <div class="profile-card">
+            <div class="profile-cover"></div>
+            
+            <div class="profile-avatar-row">
+              <img id="profileUserAvatar" src="" alt="User Avatar" class="profile-avatar-large">
+              <div class="profile-header-info">
+                <h3 id="profileUserName">Koyyada Rohith</h3>
+                <p id="profileUserTitleRole">Founder</p>
+              </div>
+            </div>
+
+            <div class="profile-body">
+              <div id="profileAlert" class="auth-alert" style="margin-bottom: 20px;"></div>
+              
+              <form id="profileEditForm" onsubmit="profileModule.handleSaveSubmit(event)">
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label for="profName">Display Full Name</label>
+                    <input type="text" id="profName" required>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="profEmail">Workspace Email</label>
+                    <input type="email" id="profEmail" readonly style="background-color: #f1f5f9; cursor: not-allowed; color: var(--text-muted);">
+                  </div>
+
+                  <div class="form-grid" style="grid-column: span 2; margin-bottom: 0; gap: 20px;">
+                    <div class="form-group">
+                      <label for="profTitle">Startup Position Title</label>
+                      <input type="text" id="profTitle" placeholder="e.g. CEO & Security Architect">
+                    </div>
+                    <div class="form-group">
+                      <label for="profDept">Workspace Department</label>
+                      <select id="profDept">
+                      <option value="Management">Management</option>
+                      <option value="Security Operations">Security Operations</option>
+                      <option value="Engineering">Engineering</option>
+                      <option value="Design">Design</option>
+                      <option value="Human Resources">Human Resources</option>
+                      <option value="Marketing">Marketing</option>
+                      <option value="Sales">Sales</option>
+                      <option value="Finance">Finance</option>
+                      <option value="Research & Development">Research & Development</option>
+                      <option value="Operations">Operations</option>
+                      <option value="Legal">Legal</option>
+                      <option value="Customer Support">Customer Support</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="profContact">Contact Number</label>
+                    <input type="text" id="profContact" placeholder="+1 (555) 000-0000">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="profStatus">Active Status dot</label>
+                    <select id="profStatus">
+                      <option value="online">Online & Available</option>
+                      <option value="away">Away / Busy</option>
+                      <option value="offline">Offline / Focused</option>
+                    </select>
+                  </div>
+
+                  <!-- Upgraded Phase 3.5 Social Links inputs -->
+                  <div class="form-group">
+                    <label for="profLinkedin"><i class="fa-brands fa-linkedin" style="color:#0077b5; margin-right:4px;"></i> LinkedIn Profile URL</label>
+                    <input type="url" id="profLinkedin" placeholder="https://linkedin.com/in/username">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="profGithub"><i class="fa-brands fa-github" style="color:var(--text-main); margin-right:4px;"></i> GitHub Roster URL</label>
+                    <input type="url" id="profGithub" placeholder="https://github.com/username">
+                  </div>
+
+                  <div class="form-group full-width">
+                    <label for="profPortfolio"><i class="fa-solid fa-globe" style="color:var(--primary-color); margin-right:4px;"></i> Personal Portfolio Web Link</label>
+                    <input type="url" id="profPortfolio" placeholder="https://portfolio.com">
+                  </div>
+
+                  <!-- Professional Experience sheets -->
+                  <div class="form-group full-width">
+                    <label for="profSkills">Strategic Skill keywords (comma separated)</label>
+                    <input type="text" id="profSkills" placeholder="e.g. strategy, malware analysis, UX patterns">
+                  </div>
+
+                  <div class="form-group full-width">
+                    <label for="profSummary">Professional Executive Summary</label>
+                    <textarea id="profSummary" rows="2" placeholder="Brief outline bio summary..."></textarea>
+                  </div>
+
+                  <div class="form-group full-width">
+                    <label for="profExperience">Workspace Employment Experience</label>
+                    <textarea id="profExperience" rows="2" placeholder="Job titles, milestone accomplishments..."></textarea>
+                  </div>
+
+                  <div class="form-grid" style="grid-column: span 2; margin-bottom: 0; gap: 20px;">
+                    <div class="form-group">
+                      <label for="profEducation">Educational parameters</label>
+                      <input type="text" id="profEducation" placeholder="e.g. Stanford Computer Science">
+                    </div>
+                    <div class="form-group">
+                      <label for="profCertifications">Professional Certifications</label>
+                      <input type="text" id="profCertifications" placeholder="e.g. CISSP, AWS solution">
+                    </div>
+                  </div>
+
+                  <div class="form-group full-width" style="display:none;">
+                    <label for="profRole">Access level</label>
+                    <input type="text" id="profRole" readonly>
+                  </div>
+
+                  <div class="form-group full-width">
+                    <label for="profBio">Identity Bio</label>
+                    <textarea id="profBio" rows="2" placeholder="Describe operations..."></textarea>
+                  </div>
+                </div>
+
+                <div class="form-actions-row">
+                  <button type="submit" class="btn-primary">
+                    <i class="fa-regular fa-floppy-disk"></i> Save Profile details
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 8. SETTINGS VIEWPORT                       -->
+        <!-- ========================================== -->
+        <section id="view-settings" class="content-view">
+          <div class="settings-container">
+            <form id="settingsForm" onsubmit="handleSaveSettings(event)" style="display: flex; flex-direction: column; gap: 24px;">
+              <div id="settingsAlert" class="auth-alert"></div>
+              
+              <!-- Theme selection block -->
+              <div class="settings-section-card">
+                <h4 class="settings-section-title"><i class="fa-solid fa-circle-half-stroke" style="color:var(--secondary-color);"></i>Workspace Appearance Theme</h4>
+                <div class="form-group" style="max-width:320px;">
+                  <label for="set-appearance-theme">Select Interface Theme</label>
+                  <select id="set-appearance-theme" onchange="applyWorkspaceTheme(this.value)" style="padding:8px 12px;">
+                    <option value="light">Light Theme Mode (Standard)</option>
+                    <option value="dark">Dark Theme Mode (Midnight Ops)</option>
+                    <option value="auto">Auto Sync Schedule</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Notifications preferences -->
+              <div class="settings-section-card">
+                <h4 class="settings-section-title"><i class="fa-solid fa-envelope" style="color: var(--primary-color);"></i>Notification Preferences</h4>
+                
+                <div class="settings-checkbox-row">
+                  <input type="checkbox" id="set-notif-email" checked>
+                  <div class="settings-checkbox-label">
+                    <span class="settings-checkbox-title">Email Workspace Digests</span>
+                    <span class="settings-checkbox-desc">Receive clean summaries of project milestones and alerts inside your inbox.</span>
+                  </div>
+                </div>
+
+                <div class="settings-checkbox-row">
+                  <input type="checkbox" id="set-notif-push" checked>
+                  <div class="settings-checkbox-label">
+                    <span class="settings-checkbox-title">Real-Time Push Alerts</span>
+                    <span class="settings-checkbox-desc">Pop up dashboard banners when new tasks are assigned.</span>
+                  </div>
+                </div>
+
+                <div class="settings-checkbox-row">
+                  <input type="checkbox" id="set-notif-alerts" checked>
+                  <div class="settings-checkbox-label">
+                    <span class="settings-checkbox-title">Browser Desktop Alerts</span>
+                    <span class="settings-checkbox-desc">Simulate desktop status notifications for announcements.</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Privacy Controls -->
+              <div class="settings-section-card">
+                <h4 class="settings-section-title"><i class="fa-solid fa-eye-slash" style="color: var(--secondary-color);"></i>Workspace Privacy Settings</h4>
+                
+                <div class="settings-checkbox-row">
+                  <input type="checkbox" id="set-priv-status" checked>
+                  <div class="settings-checkbox-label">
+                    <span class="settings-checkbox-title">Show Active Status Dot</span>
+                    <span class="settings-checkbox-desc">Let other team members see if you are online, away, or currently offline.</span>
+                  </div>
+                </div>
+
+                <div class="settings-checkbox-row">
+                  <input type="checkbox" id="set-priv-share" checked>
+                  <div class="settings-checkbox-label">
+                    <span class="settings-checkbox-title">Share Productivity Metrics</span>
+                    <span class="settings-checkbox-desc">Allow the Analytics engine to compute contribution score ratios.</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Password credentials change simulator -->
+              <div class="settings-section-card">
+                <h4 class="settings-section-title"><i class="fa-solid fa-key" style="color: var(--color-danger);"></i>Security Credentials Override</h4>
+                <div class="form-grid" style="margin-bottom: 0;">
+                  <div class="form-group">
+                    <label for="set-pass-new">New Password Override</label>
+                    <input type="password" id="set-pass-new" placeholder="Enter new password (optional)">
+                  </div>
+                  <div class="form-group">
+                    <label for="set-pass-confirm">Confirm Password Override</label>
+                    <input type="password" id="set-pass-confirm" placeholder="Re-type new password">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Session histories -->
+              <div class="settings-section-card">
+                <h4 class="settings-section-title"><i class="fa-solid fa-clock-rotate-left" style="color:var(--primary-color);"></i>Active Session History</h4>
+                <div id="workspaceSessionsHistoryList" style="display:flex; flex-direction:column; max-height:200px; overflow-y:auto; padding:6px 0;">
+                  <!-- Filled dynamically -->
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end;">
+                <button type="submit" class="btn-primary" style="padding: 12px 24px;">
+                  <i class="fa-regular fa-square-check"></i> Save Workspace Preferences
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 9. TEAM DIRECTORY VIEWPORT (UPGRADED FIX)  -->
+        <!-- ========================================== -->
+        <section id="view-directory" class="content-view">
+          <div class="module-toolbar">
+            <div class="search-filter-row">
+              <div class="topbar-search" style="display: block; width: 220px;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="directorySearchInput" placeholder="Search by name, skills..." oninput="cbsDirectory.render()">
+              </div>
+        <select id="directoryRoleFilter" class="filter-select" onchange="cbsDirectory.render()">
+            <option value="All">All Roles</option>
+            <option value="Admin">Admin</option>
+            <option value="Founder">Founder</option>
+            <option value="CEO">CEO</option>
+            <option value="Manager">Manager</option>
+            <option value="SOC Analyst">SOC Analyst</option>
+            <option value="Security Engineer">Security Engineer</option>
+            <option value="Threat Hunter">Threat Hunter</option>
+            <option value="Ethical Hacker">Ethical Hacker</option>
+            <option value="Incident Responder">Incident Responder</option>
+            <option value="Frontend Developer">Frontend Developer</option>
+            <option value="Backend Developer">Backend Developer</option>
+            <option value="Full Stack Developer">Full Stack Developer</option>
+            <option value="AI Engineer">AI Engineer</option>
+            <option value="DevOps Engineer">DevOps Engineer</option>
+            <option value="Project Lead">Project Lead</option>
+            <option value="Intern">Intern</option>
+        </select>
+
+        <select id="directoryDeptFilter" class="filter-select" onchange="cbsDirectory.render()">
+            <option value="All">All Departments</option>
+            <option value="Administration & Operations">Administration & Operations</option>
+            <option value="Security Operations">Security Operations</option>
+            <option value="Cybersecurity">Cybersecurity</option>
+            <option value="Artificial Intelligence">Artificial Intelligence</option>
+            <option value="Engineering">Engineering</option>
+            <option value="DevOps">DevOps</option>
+            <option value="Research & Development">Research & Development</option>
+            <option value="Management">Management</option>
+            <option value="Design">Design</option>
+            <option value="Human Resources">Human Resources</option>
+            <option value="Marketing">Marketing</option>
+            <option value="Sales">Sales</option>
+            <option value="Finance">Finance</option>
+            <option value="Customer Support">Customer Support</option>
+            <option value="Quality Assurance">Quality Assurance</option>
+        </select>
+            </div>
+          <!-- Directory Cards responsive grid -->
+          <div id="directoryCardsGrid" class="projects-grid">
+            <!-- Dynamically Populated by directoryModule inside profile.js -->
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 10. ADMIN PANEL VIEWPORT                   -->
+        <!-- ========================================== -->
+        <section id="view-admin" class="content-view">
+          <!-- Loaded dynamically by admin.js -->
+        </section>
+
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL POPUPS SYSTEM (PORTABLE OVERLAYS)    -->
+  <!-- ========================================== -->
+
+  <!-- 1. ADD/EDIT PROJECT MODAL -->
+  <div id="projectModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="projectModalTitle">Create Startup Project</h3>
+        <button onclick="projectsModule.closeOverlay('projectModal')" class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="projectForm" onsubmit="projectsModule.handleSaveSubmit(event)">
+          <input type="hidden" id="projId">
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="projName">Project Designation Title</label>
+            <input type="text" id="projName" placeholder="e.g. Aegis Intelligence Core" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="projDesc">Brief Operational Description</label>
+            <textarea id="projDesc" rows="3" placeholder="Provide background parameters..." required></textarea>
+          </div>
+          <div class="form-grid" style="gap: 16px; margin-bottom: 16px;">
+            <div class="form-group">
+              <label for="projStatus">Project Stage</label>
+              <select id="projStatus" required>
+                <option value="Planning">Planning</option>
+                <option value="In Progress">In Progress</option>
+                <option value="In Review">In Review</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="projProgress">Progress Overload (%)</label>
+              <input type="number" id="projProgress" min="0" max="100" placeholder="0">
+            </div>
+          </div>
+          <div class="form-grid" style="gap: 16px; margin-bottom: 20px;">
+            <div class="form-group">
+              <label for="projStart">Target Start Date</label>
+              <input type="date" id="projStart" required>
+            </div>
+            <div class="form-group">
+              <label for="projDue">Target Due Date</label>
+              <input type="date" id="projDue" required>
+            </div>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label>Assign Collaborative Team</label>
+            <div id="projectModalMembersChecklist" style="display: flex; flex-direction: column; gap: 8px; max-height: 120px; overflow-y: auto; background: var(--bg-main); border: 1px solid var(--border-color); padding: 8px; border-radius: var(--radius-sm);">
+              <!-- Populated dynamic list -->
+            </div>
+          </div>
+
+          <div class="form-actions-row">
+            <button type="button" onclick="projectsModule.closeOverlay('projectModal')" class="btn-secondary">Cancel</button>
+            <button type="submit" class="btn-primary">Save Project</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. ADD/EDIT TASK MODAL -->
+  <div id="taskModal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="taskModalTitle">Create Workspace Task</h3>
+        <button onclick="tasksModule.closeOverlay('taskModal')" class="modal-close-btn"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <form id="taskForm" onsubmit="tasksModule.handleSaveSubmit(event)">
+          <input type="hidden" id="taskId">
+          
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="taskTitle">Task Designation</label>
+            <input type="text" id="taskTitle" placeholder="e.g. Audit kernel memory leakage" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="taskDesc">Functional Requirements</label>
+            <textarea id="taskDesc" rows="3" placeholder="Define expected outcomes..." required></textarea>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 16px;">
+            <label for="taskProjectId">Target Startup Project</label>
+            <select id="taskProjectId" required>
+              <option value="" disabled selected>Select a parent project...</option>
+              <!-- Populated dynamic list -->
+            </select>
+          </div>
+
+          <div class="form-grid" style="gap: 16px; margin-bottom: 16px;">
+            <div class="form-group">
+              <label for="taskPriority">Priority Tier</label>
+              <select id="taskPriority" required>
+                <option value="Low">Low Priority</option>
+                <option value="Medium" selected>Medium Priority</option>
+                <option value="High">High Priority</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="taskStatus">Execution Stage</label>
+              <select id="taskStatus" required>
+                <option value="Backlog">Backlog</option>
+                <option value="To Do">To Do</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Review">In Review</option>
+                <option value="Completed">Completed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid" style="gap: 16px; margin-bottom: 20px;">
+            <div class="form-group">
+              <label for="taskAssigneeId">Assigned Collaborator</label>
+              <select id="taskAssigneeId" required>
+                <option value="" disabled selected>Select team member...</option>
+                <!-- Populated dynamic list -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="taskDue">Due Date</label>
+              <input type="date" id="taskDue" required>
+            </div>
+          </div>
+
+          <div class="form-group" id="taskProgressGroup" style="margin-bottom: 20px; display: none;">
+            <label for="taskProgress">Task Completion Progress (%)</label>
+            <input type="number" id="taskProgress" min="0" max="100" value="0">
+          </div>
+
+          <div class="form-actions-row">
+            <button type="button" onclick="tasksModule.closeOverlay('taskModal')" class="btn-secondary">Cancel</button>
+            <button type="submit" class="btn-primary">Save Task</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. PROJECT DETAILS VIEW MODAL (WITH TABS SUPPORT) -->
+  <div id="projectDetailsModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 600px;">
+      <!-- Loaded dynamically by projectsModule.openDetailsModal -->
+    </div>
+  </div>
+
+  <!-- Quick client theme toggler helper script -->
+  <script>
+    function cbsAppThemeQuickToggle() {
+      const body = document.body;
+      body.classList.toggle('dark-theme');
+      const isDark = body.classList.contains('dark-theme');
+      
+      // Save setting preference
+      if (window.cbsDB) {
+        const settings = window.cbsDB.getSettings();
+        settings.appearance = isDark ? 'dark' : 'light';
+        window.cbsDB.saveSettings(settings);
+      }
+      
+      if (window.showToastNotification) {
+        window.showToastNotification('Theme Updated', isDark ? 'Midnight Darkness theme online.' : 'Crisp light theme online.');
+      }
+      
+      if (window.cbsApp) {
+        window.cbsApp.sync();
+      }
+    }
+  </script>
+
+  <!-- Cyber Black Squad Workspace App Modules Scripts -->
+  <script src="js/db.js?v=1.1.1"></script>
+  <script src="js/auth.js?v=1.1.1"></script>
+  <script src="js/projects.js?v=1.1.1"></script>
+  <script src="js/tasks.js?v=1.1.1"></script>
+  <script src="js/chat.js?v=1.1.1"></script>
+  <script src="js/notifications.js?v=1.1.1"></script>
+  <script src="js/analytics.js?v=1.1.1"></script>
+  <script src="js/profile.js?v=1.1.1"></script>
+  <script src="js/admin.js?v=1.1.1"></script>
+  
+  <!-- Master Orchestrator script loaded last -->
+  <script src="js/app.js?v=1.1.1"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Black Squad – Workspace Platform</title>
+  <!-- Main Auth Core -->
+  <script src="js/db.js?v=1.1.1"></script>
+  <script src="js/auth.js?v=1.1.1"></script>
+</head>
+<body style="background-color: #f8fafc; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+  <div style="text-align: center; color: #64748b;">
+    <h3 style="color: #0f172a; margin-bottom: 8px;">Synchronizing Workspace...</h3>
+    <p style="font-size: 14px;">Cyber Black Squad Operations</p>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Ensure db and auth are fully initialized before checking authentication
+      setTimeout(() => {
+        try {
+          if (window.cbsAuth && window.cbsAuth.isAuthenticated()) {
+            // User is authenticated - go to dashboard
+            window.location.href = 'dashboard.html';
+          } else {
+            // User is not authenticated - go to home landing page
+            window.location.href = 'home.html';
+          }
+        } catch (err) {
+          // Fallback to home page if error occurs during auth check
+          console.warn('Auth check error:', err);
+          window.location.href = 'home.html';
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>
