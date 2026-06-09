@@ -2,8 +2,6 @@
 
 A modern, vanilla JavaScript workspace platform for startups and teams to collaborate on projects, manage tasks, and communicate in one place.
 
-> **Offline-first**: uses browser storage (LocalStorage) so it can run without a backend server.
-
 ## 📋 Table of Contents
 
 - [Overview](#overview)
