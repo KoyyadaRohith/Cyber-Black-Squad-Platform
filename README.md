@@ -346,7 +346,7 @@ Koyyada Rohith
 
 Version 1.0
 
-## 📄 License
+## 📜 License
 
-This project is proprietary software. All rights reserved.
+This project is licensed under the MIT License. See the LICENSE file for details.
 
