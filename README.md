@@ -88,8 +88,6 @@ Cyber-Black-Squad/
 │   ├── projects.js
 │   └── tasks.js
 │
-├── node_modules/
-│
 ├── dashboard.html
 ├── home.html
 ├── index.html
