@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Black Squad – Enterprise Startup Management Platform</title>
+
+  <!-- FontAwesome for Premium Icons & Poppins Web Font -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/home.css">
+
+  <!-- Supabase client and Core Auth/Data scripts for session management -->
+  <script src="js/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+  <script src="js/db.js?v=1.1.2"></script>
+  <script src="js/auth.js?v=1.1.2"></script>
+</head>
+
+<body>
+
+  <!-- --- CYBER CANVAS DYNAMIC BACKGROUND --- -->
+  <div class="cyber-bg-canvas">
+    <div class="light-blob blob-1"></div>
+    <div class="light-blob blob-2"></div>
+    <div class="light-blob blob-3"></div>
+  </div>
+
+  <!-- --- STICKY NAVIGATION BAR --- -->
+  <header class="nav-header" id="navHeader">
+    <div class="container">
+      <div class="nav-logo-box" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <i class="fa-solid fa-shield-halved"></i>
+        <span>Cyber Black Squad</span>
+      </div>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#home" class="active">Home</a>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#modules">Modules</a>
+        <a href="#about-contact">About</a>
+
+        <!-- Mobile view extra CTA links -->
+        <div class="mobile-actions" style="display: none; width: 100%;">
+          <a href="login.html" class="btn btn-secondary" style="width: 100%; text-align: center;"
+            id="mobileCtaLogin">Login</a>
+          <a href="register.html" class="btn btn-register-grad" style="width: 100%; text-align: center;"
+            id="mobileCtaRegister">Register</a>
+        </div>
+      </nav>
+
+      <div class="nav-actions" id="navActions">
+        <a href="login.html" class="btn btn-secondary" id="navBtnLogin">Login</a>
+        <a href="register.html" class="btn btn-register-grad" id="navBtnRegister">Register</a>
+      </div>
+
+      <div class="mobile-toggle" id="mobileToggle">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+    </div>
+  </header>
+
+  <!-- --- HERO SECTION --- -->
+  <section class="hero-section" id="home">
+    <div class="container">
+      <div class="hero-grid">
+        <!-- Hero Left Side Content -->
+        <div class="hero-content reveal-fade-up">
+          <div class="badge-premium">
+            <i class="fa-solid fa-bolt"></i> Welcome to Cyber Black Squad
+          </div>
+          <h1>
+            CYBER BLACK SQUAD <br>
+            <span class="gradient-text">Startup Management & Collaboration Platform</span>
+          </h1>
+          <p>
+            Manage projects, tasks, teams, collaboration, analytics, notifications, and workspace operations from one
+            centralized, secure, enterprise-level environment.
+          </p>
+          <div class="hero-actions">
+            <a href="register.html" class="btn btn-primary" id="heroBtnGetStarted">
+              Get Started <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            <a href="login.html" class="btn btn-secondary" id="heroBtnLogin">
+              Login
+            </a>
+          </div>
+        </div>
+
+        <!-- Hero Right Side Animated Technology Visual -->
+        <div class="hero-visual reveal-fade-up" style="transition-delay: 0.2s;">
+          <div class="tech-canvas">
+            <!-- Rotating Dashed Orbit Rings -->
+            <div class="tech-ring ring-outer"></div>
+            <div class="tech-ring ring-mid"></div>
+            <div class="tech-ring ring-inner"></div>
+
+            <!-- Central Shield & Sword Core Glow -->
+            <div class="tech-core">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+
+            <!-- Floating Cubes -->
+            <div class="floating-cube cube-1"></div>
+            <div class="floating-cube cube-2"></div>
+
+            <!-- Floating Interactive Mock Dashboard Panels -->
+            <div class="floating-panel panel-1 p-blue" onclick="window.location.href='login.html'">
+              <div class="panel-icon-box">
+                <i class="fa-solid fa-list-check"></i>
+              </div>
+              <div class="panel-info">
+                <span class="panel-title">Active Sprints</span>
+                <span class="panel-value">94.8% Complete</span>
+              </div>
+            </div>
+
+            <div class="floating-panel panel-2 p-purple" onclick="window.location.href='login.html'">
+              <div class="panel-icon-box">
+                <i class="fa-solid fa-shield-halved"></i>
+              </div>
+              <div class="panel-info">
+                <span class="panel-title">Workspace Defense</span>
+                <span class="panel-value">Zero Vulnerability</span>
+              </div>
+            </div>
+
+            <div class="floating-panel panel-3 p-cyan" onclick="window.location.href='login.html'">
+              <div class="panel-icon-box">
+                <i class="fa-solid fa-chart-line"></i>
+              </div>
+              <div class="panel-info">
+                <span class="panel-title">Productivity Speed</span>
+                <span class="panel-value">▲ 18.4% Faster</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- SECTION 2: FEATURES --- -->
+  <section class="section-padding" id="features">
+    <div class="container">
+      <div class="section-header reveal-fade-up">
+        <span class="section-label">Features</span>
+        <h2 class="section-title">Everything You Need To Succeed</h2>
+        <p class="section-subtitle">Powerful tools to manage, collaborate and grow your startup workspace efficiently.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Card 1: Project Management -->
+        <div class="feature-card card-blue reveal-fade-up">
+          <div class="feature-card-icon">
+            <i class="fa-solid fa-folder-open"></i>
+          </div>
+          <h3>Project Management</h3>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">
+            Seamlessly initialize, customize, and oversee multi-tier startup workflows from a unified command board.
+          </p>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-square-check"></i> Create Projects</li>
+            <li><i class="fa-solid fa-square-check"></i> Manage Teams</li>
+            <li><i class="fa-solid fa-square-check"></i> Track Progress</li>
+          </ul>
+        </div>
+
+        <!-- Card 2: Task Management -->
+        <div class="feature-card card-purple reveal-fade-up" style="transition-delay: 0.1s;">
+          <div class="feature-card-icon">
+            <i class="fa-solid fa-clipboard-list"></i>
+          </div>
+          <h3>Task Management</h3>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">
+            Optimize operational flow using flexible Kanban task architectures, transparent assignments, and due-dates.
+          </p>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-square-check"></i> Kanban Board</li>
+            <li><i class="fa-solid fa-square-check"></i> Assign Tasks</li>
+            <li><i class="fa-solid fa-square-check"></i> Due Dates</li>
+          </ul>
+        </div>
+
+        <!-- Card 3: Team Collaboration -->
+        <div class="feature-card card-green reveal-fade-up" style="transition-delay: 0.2s;">
+          <div class="feature-card-icon">
+            <i class="fa-solid fa-comments"></i>
+          </div>
+          <h3>Team Collaboration</h3>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">
+            Foster direct alignment and agile operations with channels, custom discussions, and live feed tickers.
+          </p>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-square-check"></i> Channels</li>
+            <li><i class="fa-solid fa-square-check"></i> Discussions</li>
+            <li><i class="fa-solid fa-square-check"></i> Activity Feed</li>
+          </ul>
+        </div>
+
+        <!-- Card 4: Analytics & Reporting -->
+        <div class="feature-card card-orange reveal-fade-up">
+          <div class="feature-card-icon">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <h3>Analytics & Reporting</h3>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">
+            Synthesize key workspace performance telemetry, milestones, velocity vectors, and productivity records.
+          </p>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-square-check"></i> Productivity Metrics</li>
+            <li><i class="fa-solid fa-square-check"></i> Team Insights</li>
+            <li><i class="fa-solid fa-square-check"></i> Growth Tracking</li>
+          </ul>
+        </div>
+
+        <!-- Card 5: Administrator Control Center -->
+        <div class="feature-card card-red reveal-fade-up" style="transition-delay: 0.1s;">
+          <div class="feature-card-icon">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <h3>Administrator Control Center</h3>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">
+            Enforce granular access control, inspect security audit history trails, and supervise resource quotas.
+          </p>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-square-check"></i> User Management</li>
+            <li><i class="fa-solid fa-square-check"></i> Activity Logs</li>
+            <li><i class="fa-solid fa-square-check"></i> Workspace Control</li>
+          </ul>
+        </div>
+
+        <!-- Card 6: Profile Management -->
+        <div class="feature-card card-cyan reveal-fade-up" style="transition-delay: 0.2s;">
+          <div class="feature-card-icon">
+            <i class="fa-solid fa-id-card"></i>
+          </div>
+          <h3>Profile Management</h3>
+          <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px;">
+            Feature professional skillsets, compile certifications, state background details, and reference portfolio
+            works.
+          </p>
+          <ul class="feature-list">
+            <li><i class="fa-solid fa-square-check"></i> Professional Profiles</li>
+            <li><i class="fa-solid fa-square-check"></i> Skills & Experience</li>
+            <li><i class="fa-solid fa-square-check"></i> Portfolio Links</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- SECTION 3: HOW IT WORKS --- -->
+  <section class="section-padding" id="how-it-works" style="background: rgba(10, 15, 31, 0.4);">
+    <div class="container">
+      <div class="section-header reveal-fade-up">
+        <span class="section-label">Workflow</span>
+        <h2 class="section-title">Simple Steps To Get Started</h2>
+        <p class="section-subtitle">Adopt the zero-trust startup hub and coordinate resources in minutes.</p>
+      </div>
+
+      <div class="steps-wrapper reveal-fade-up">
+        <div class="steps-connector-line"></div>
+
+        <!-- Step 1 -->
+        <div class="step-card">
+          <div class="step-number-ring" data-step="1">
+            <i class="fa-solid fa-user-plus"></i>
+            <div class="step-connector-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+          </div>
+          <h4>Create Account</h4>
+          <p>Register a workspace identity profile</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-card">
+          <div class="step-number-ring" data-step="2">
+            <i class="fa-solid fa-right-to-bracket"></i>
+            <div class="step-connector-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+          </div>
+          <h4>Access Workspace</h4>
+          <p>Authenticate in our secure portal sandbox</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-card">
+          <div class="step-number-ring" data-step="3">
+            <i class="fa-solid fa-folder-tree"></i>
+            <div class="step-connector-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+          </div>
+          <h4>Manage Work</h4>
+          <p>Launch dynamic boards, items, and schedules</p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step-card">
+          <div class="step-number-ring" data-step="4">
+            <i class="fa-solid fa-users"></i>
+            <div class="step-connector-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+          </div>
+          <h4>Collaborate</h4>
+          <p>Align instantly across operational threads</p>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="step-card">
+          <div class="step-number-ring" data-step="5">
+            <i class="fa-solid fa-chart-pie"></i>
+          </div>
+          <h4>Track Analytics</h4>
+          <p>Review real-time progress metrics and reports</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- SECTION 4: PLATFORM MODULES --- -->
+  <section class="section-padding" id="modules">
+    <div class="container">
+      <div class="section-header reveal-fade-up">
+        <span class="section-label">Modules</span>
+        <h2 class="section-title">Powerful Modules for Every Role</h2>
+        <p class="section-subtitle">Dedicated operational spaces optimized to drive execution across entire teams.</p>
+      </div>
+
+      <div class="modules-grid">
+        <!-- Module 1 -->
+        <div class="module-card reveal-fade-up" onclick="window.location.href='login.html'">
+          <div class="module-icon-box"><i class="fa-solid fa-gauge-high"></i></div>
+          <h4>Dashboard</h4>
+          <p>Startup health synopsis</p>
+        </div>
+
+        <!-- Module 2 -->
+        <div class="module-card reveal-fade-up" onclick="window.location.href='login.html'">
+          <div class="module-icon-box"><i class="fa-solid fa-cube"></i></div>
+          <h4>Projects</h4>
+          <p>Vanguard workflow manager</p>
+        </div>
+
+        <!-- Module 3 -->
+        <div class="module-card reveal-fade-up" onclick="window.location.href='login.html'">
+          <div class="module-icon-box"><i class="fa-solid fa-list-check"></i></div>
+          <h4>Tasks</h4>
+          <p>Kanban sprint coordinate</p>
+        </div>
+
+        <!-- Module 4 -->
+        <div class="module-card reveal-fade-up" onclick="window.location.href='login.html'">
+          <div class="module-icon-box"><i class="fa-solid fa-address-book"></i></div>
+          <h4>Team Directory</h4>
+          <p>Workspace directory details</p>
+        </div>
+
+        <!-- Module 5 -->
+        <div class="module-card reveal-fade-up" onclick="window.location.href='login.html'">
+          <div class="module-icon-box"><i class="fa-solid fa-message"></i></div>
+          <h4>Collaboration</h4>
+          <p>Unified real-time forums</p>
+        </div>
+
+        <!-- Module 6 -->
+        <div class="module-card reveal-fade-up" onclick="window.location.href='login.html'">
+          <div class="module-icon-box"><i class="fa-solid fa-bell"></i></div>
+          <h4>Notifications</h4>
+          <p>System operational logs</p>
+        </div>
+
+        <!-- Module 7 -->
+        <div class="module-card reveal-fade-up" onclick="window.location.href='login.html'">
+          <div class="module-icon-box"><i class="fa-solid fa-chart-simple"></i></div>
+          <h4>Analytics</h4>
+          <p>Startup progression curves</p>
+        </div>
+
+        <!-- Module 8 -->
+        <div class="module-card reveal-fade-up" onclick="window.location.href='login.html'">
+          <div class="module-icon-box"><i class="fa-solid fa-user-tie"></i></div>
+          <h4>Profile</h4>
+          <p>Professional identity page</p>
+        </div>
+
+        <!-- Module 9 -->
+        <div class="module-card reveal-fade-up" onclick="window.location.href='login.html'">
+          <div class="module-icon-box"><i class="fa-solid fa-sliders"></i></div>
+          <h4>Settings</h4>
+          <p>Global systems controls</p>
+        </div>
+
+        <!-- Module 10 -->
+        <div class="module-card reveal-fade-up" onclick="window.location.href='login.html'">
+          <div class="module-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+          <h4>Administrator Panel</h4>
+          <p>Enterprise defense logs</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- --- SECTION 5: ABOUT + CONTACT --- -->
+  <section class="section-padding" id="about-contact" style="background: rgba(10, 15, 31, 0.6); position: relative;">
+    <div class="container">
+      <div class="about-contact-grid">
+
+        <!-- Left: About column containing subtle Sword Watermark -->
+        <div class="about-info-block reveal-fade-up">
+          <!-- Inline Sword SVG Watermark -->
+          <svg class="about-watermark-svg" viewBox="0 0 100 100" fill="currentColor">
+            <path
+              d="M47 5 L53 5 L53 60 L65 60 L65 65 L53 65 L53 85 L60 95 L40 95 L47 85 L47 65 L35 65 L35 60 L47 60 Z" />
+          </svg>
+
+          <span class="section-label" style="margin-bottom: 8px;">About Us</span>
+          <h3>About Cyber Black Squad</h3>
+          <p>
+            Cyber Black Squad is a modern startup management ecosystem designed to help founders,
+            Administrators, managers, and team members collaborate efficiently through a centralized digital
+            workspace.
+          </p>
+          <p>
+            Enforcing modern security architectures, granular database audits, and zero-trust sandboxing, we eliminate
+            Administrative friction so your team can focus fully on product engineering, market exploration, and
+            scaling operations.
+          </p>
+        </div>
+
+        <!-- Right: Contact Us block styled with premium SaaS aesthetics -->
+        <div class="contact-form-block reveal-fade-up" style="transition-delay: 0.1s;">
+          <span class="section-label" style="margin-bottom: 8px;">Get In Touch</span>
+          <h3>Contact Us</h3>
+          <p class="subtitle">Have inquiries regarding the Cyber Black Squad framework? Drop our Administration
+            team a line.</p>
+
+          <div class="contact-info-list">
+            <div class="contact-info-item">
+              <div class="contact-item-icon">
+                <i class="fa-regular fa-envelope"></i>
+              </div>
+              <div class="contact-item-content">
+                <span>Email Address</span>
+                <span><a href="mailto:cyberblackworld.eco@gmail.com">cyberblackworld.eco@gmail.com</a></span>
+              </div>
+            </div>
+
+            <div class="contact-info-item">
+              <div class="contact-item-icon">
+                <i class="fa-solid fa-server"></i>
+              </div>
+              <div class="contact-item-content">
+                <span>Platform Base</span>
+                <span>Cyber Black Squad Workspace Operations</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- --- SECTION 6: FOOTER --- -->
+  <footer class="footer-wrapper">
+    <div class="container">
+      <div class="footer-columns">
+
+        <!-- Column 1: Info & Socials -->
+        <div class="footer-col footer-about-info">
+          <h3><i class="fa-solid fa-shield-halved"></i> Cyber Black Squad</h3>
+          <p>
+            The comprehensive enterprise-grade startup management and secure workspace collaboration environment.
+          </p>
+          <div class="social-links-row">
+            <a href="#" class="social-link-btn"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-link-btn"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" class="social-link-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="#" class="social-link-btn"><i class="fa-brands fa-github"></i></a>
+          </div>
+        </div>
+
+        <!-- Column 2: Quick links -->
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul class="footer-menu-list">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#modules">Modules</a></li>
+            <li><a href="#about-contact">About & Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 3: Resources -->
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <ul class="footer-menu-list">
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Support Hub</a></li>
+          </ul>
+        </div>
+
+        <!-- Column 4: Stay updated -->
+        <div class="footer-col">
+          <h4>Stay Updated</h4>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">
+            Subscribe to our newsletter for key security updates, software releases, and team logs.
+          </p>
+          <form class="subscribe-form"
+            onsubmit="event.preventDefault(); alert('Successfully Subscribed to Cyber Black Squad logs!'); this.reset();">
+            <input type="email" placeholder="name@cyberblacksquad.com" required>
+            <button type="submit" class="btn btn-primary" style="padding: 10px; width: 100%;">Subscribe</button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom Copyright Bar -->
+      <div class="footer-bottom">
+        <p>© 2026 Cyber Black Squad. All Rights Reserved.</p>
+        <p style="font-size: 11px; color: rgba(255,255,255,0.2);">Zero-Trust Startup Hub v1.2.0</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- --- JAVASCRIPT ANIMATIONS & INTERACTIONS --- -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Sticky Navigation Bar Scroll Trigger
+      const navHeader = document.getElementById('navHeader');
+      const navLinks = document.querySelectorAll('.nav-links a');
+
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+          navHeader.classList.add('scrolled');
+        } else {
+          navHeader.classList.remove('scrolled');
+        }
+
+        // Highlight active link based on scroll position
+        let current = '';
+        const sections = document.querySelectorAll('section, footer');
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          if (window.scrollY >= (sectionTop - 150)) {
+            current = section.getAttribute('id') || '';
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+          }
+        });
+      });
+
+      // 2. Mobile Responsive Menu Toggler
+      const mobileToggle = document.getElementById('mobileToggle');
+      const mainNavLinks = document.getElementById('navLinks');
+
+      mobileToggle.addEventListener('click', () => {
+        mainNavLinks.classList.toggle('active');
+        const icon = mobileToggle.querySelector('i');
+        if (mainNavLinks.classList.contains('active')) {
+          icon.className = 'fa-solid fa-xmark';
+        } else {
+          icon.className = 'fa-solid fa-bars';
+        }
+      });
+
+      // Close mobile menu on click of nav links
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          mainNavLinks.classList.remove('active');
+          mobileToggle.querySelector('i').className = 'fa-solid fa-bars';
+        });
+      });
+
+      // 3. Authentication Routing & Gate Check
+      // Dynamically display "Go to Dashboard" if user holds an authenticated token
+      const isLoggedIn = window.cbsAuth && window.cbsAuth.isAuthenticated();
+      if (isLoggedIn) {
+        // Retrieve current active user profile details
+        const activeUser = window.cbsAuth.getCurrentUser();
+
+        // Replace desktop navigation CTA
+        const navActions = document.getElementById('navActions');
+        navActions.innerHTML = `
+          <a href="dashboard.html" class="btn btn-primary" style="padding: 10px 22px;">
+            <i class="fa-solid fa-gauge-high"></i> Dashboard
+          </a>
+        `;
+
+        // Replace hero CTA action buttons
+        const heroActions = document.querySelector('.hero-actions');
+        heroActions.innerHTML = `
+          <a href="dashboard.html" class="btn btn-primary" style="padding: 14px 32px;">
+            Go to Workspace <i class="fa-solid fa-circle-arrow-right"></i>
+          </a>
+        `;
+
+        // Configure floating illustrations panels click path directly to dashboard
+        document.querySelectorAll('.floating-panel, .module-card').forEach(panel => {
+          panel.setAttribute('onclick', "window.location.href='dashboard.html'");
+        });
+      }
+
+      // 4. Fade Up Scroll Reveal Animations
+      const revealElements = document.querySelectorAll('.reveal-fade-up');
+      const revealOnScroll = () => {
+        revealElements.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          const viewHeight = Math.max(document.documentElement.clientHeight, window.innerHeight);
+          if (rect.top <= viewHeight - 80) {
+            el.classList.add('active');
+          }
+        });
+      };
+
+      window.addEventListener('scroll', revealOnScroll);
+      // Run once on load to show initial elements above the fold
+      setTimeout(revealOnScroll, 100);
+
+      // 5. Interactive Cards Spot Light Mouse Follow Cursor
+      document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          card.style.setProperty('--x', `${x}px`);
+          card.style.setProperty('--y', `${y}px`);
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
