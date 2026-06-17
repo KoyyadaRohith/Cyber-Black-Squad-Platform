@@ -5,6 +5,22 @@
  */
 
 const profileModule = {
+  // Track if user has unsaved changes in the form
+  _liveState: {},
+  _isDirty: false,
+  _initInputListeners(form) {
+    // Attach listeners to mark form as dirty on any input change
+    const inputs = form.querySelectorAll('input, textarea, select');
+    inputs.forEach(input => {
+      input.addEventListener('input', () => {
+        profileModule._isDirty = true;
+        // Store live edit value keyed by element id
+        if (input.id) {
+          profileModule._liveState[input.id] = input.value;
+        }
+      });
+    });
+  },
   tempBase64Image: null,
 
   render() {
@@ -19,11 +35,26 @@ const profileModule = {
     if (pName) pName.textContent = user.name;
     if (pTitleRole) pTitleRole.textContent = `${user.title || user.role} | ${user.department || 'Operations'}`;
 
-    // Fill form elements
-    const setVal = (id, val) => {
+    // Fill form elements only if there are no unsaved changes
+    const form = document.getElementById('profileEditForm');
+    const setVal = (id, fallbackVal) => {
       const el = document.getElementById(id);
-      if (el) el.value = val || '';
+      if (el) {
+        // Use live edited value if present, otherwise fallback to provided value
+        const liveVal = profileModule._liveState[id];
+        if (liveVal !== undefined) {
+          el.value = liveVal;
+        } else if (!profileModule._isDirty) {
+          el.value = fallbackVal || '';
+        }
+      }
     };
+
+    // Initialize dirty tracking listeners once
+    if (form && !form.dataset.listenersAdded) {
+      profileModule._initInputListeners(form);
+      form.dataset.listenersAdded = 'true';
+    }
 
     setVal('profName', user.name);
     setVal('profEmail', user.email);
@@ -51,10 +82,10 @@ const profileModule = {
       inputs.forEach(input => {
         if (input.type === 'submit' || input.tagName === 'BUTTON') return;
         
-        // Only lock Workspace Email and Workspace Department for non-administrators
+        // Lock Workspace Email and Workspace Department for all users (admin and non-admin)
         const isLockedField = input.id === 'profEmail' || input.id === 'profDept';
-        
-        if (isLockedField && !isAdministrator) {
+
+        if (isLockedField) {
           if (input.tagName === 'SELECT') {
             input.disabled = true;
           } else {
@@ -80,6 +111,8 @@ const profileModule = {
       if (saveBtnRow) {
         saveBtnRow.style.display = '';
       }
+      // Reset dirty flag after rendering to allow fresh edits
+      profileModule._isDirty = false;
     }
 
     // Click to upload uploader binder: everyone can change their avatar!
@@ -150,6 +183,10 @@ const profileModule = {
         alertDiv.className = 'auth-alert danger';
         alertDiv.innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="margin-right: 6px;"></i> Error saving profile: ${err.message}`;
       }
+    } finally {
+      // After any save attempt, clear dirty state and live edits
+      profileModule._isDirty = false;
+      profileModule._liveState = {};
     }
   },
 

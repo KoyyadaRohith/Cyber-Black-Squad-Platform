@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cyber Black Squad – Workspace Platform</title>
   <script>
-    // Instant redirect — no scripts to load, zero delay
+    // Sync workspace session before navigation
+    if (window.cbsApp && typeof window.cbsApp.sync === 'function') {
+      window.cbsApp.sync();
+    }
     window.location.replace('home.html');
   </script>
 </head>
